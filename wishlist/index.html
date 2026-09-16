@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wishlist — Bibliotheca</title>
+  <link rel="stylesheet" href="wishlist.css" />
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">𝔅</span>
+      <span class="logo-text">Bibliotheca</span>
+      <span class="logo-version">v3.0</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="../frontend/index.html#dashboard" class="nav-item"><span class="nav-icon">◈</span><span>Dashboard</span></a>
+      <a href="../frontend/index.html#books" class="nav-item"><span class="nav-icon">◉</span><span>Biblioteca</span></a>
+      <a href="../frontend/index.html#notes" class="nav-item"><span class="nav-icon">◎</span><span>Anotações</span></a>
+      <a href="../frontend/index.html#quotes" class="nav-item"><span class="nav-icon">❝</span><span>Mural de Citações</span></a>
+      <a href="../frontend/index.html#diary" class="nav-item"><span class="nav-icon">◷</span><span>Diário de Leitura</span></a>
+      <a href="../frontend/index.html#vocabulary" class="nav-item"><span class="nav-icon">◬</span><span>Vocabulário</span></a>
+      <a href="../frontend/index.html#authors" class="nav-item"><span class="nav-icon">◐</span><span>Autores</span></a>
+      <a href="../frontend/index.html#lists" class="nav-item"><span class="nav-icon">◩</span><span>Listas Temáticas</span></a>
+      <a href="../frontend/index.html#connections" class="nav-item"><span class="nav-icon">◌</span><span>Conexões</span></a>
+      <a href="../frontend/index.html#insights" class="nav-item"><span class="nav-icon">◑</span><span>Insights</span></a>
+      <a href="../frontend/index.html#timeline" class="nav-item"><span class="nav-icon">◇</span><span>Linha do Tempo</span></a>
+      <a href="../frontend/index.html#tags" class="nav-item"><span class="nav-icon">✦</span><span>Conceitos</span></a>
+      <a href="../frontend/index.html#focus" class="nav-item"><span class="nav-icon">⊙</span><span>Modo Foco</span></a>
+      <a href="../frontend/index.html#questions" class="nav-item"><span class="nav-icon">?</span><span>Perguntas Abertas</span></a>
+      <a href="../frontend/index.html#settings" class="nav-item"><span class="nav-icon">◦</span><span>Configurações</span></a>
+      <a href="index.html" class="nav-item active"><span class="nav-icon">♡</span><span>Wishlist</span></a>
+    </nav>
+    <div class="sidebar-status">
+      <div class="status-row">
+        <span class="status-label">Lista</span>
+        <div class="status-bar-track"><div class="status-bar-fill" id="sb-fill" style="width:0%"></div></div>
+        <span class="status-val" id="sb-count">0 itens</span>
+      </div>
+    </div>
+    <div class="sidebar-quote">
+      <p>"Um livro não lido é uma promessa ainda por cumprir."</p>
+      <span>— Bibliotheca</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div class="page-header-left">
+        
+        <div>
+          <h1 class="page-title"><span class="title-icon">♡</span> Wishlist</h1>
+          <p class="page-subtitle">Livros que você deseja adquirir</p>
+        </div>
+      </div>
+      <div class="page-header-right">
+        <div class="header-stats">
+          <div class="hstat"><span class="hstat-val" id="stat-total">0</span><span class="hstat-label">Total</span></div>
+          <div class="hstat"><span class="hstat-val" id="stat-price">R$ 0</span><span class="hstat-label">Valor est.</span></div>
+          <div class="hstat"><span class="hstat-val" id="stat-priority">0</span><span class="hstat-label">Alta prioridade</span></div>
+        </div>
+        <button class="btn-primary" id="btn-add">+ Adicionar</button>
+      </div>
+    </div>
+
+    <div class="filters-bar">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="search-input" class="search-input" placeholder="Buscar na wishlist…" />
+      </div>
+      <select class="filter-select" id="filter-priority">
+        <option value="">Todas as prioridades</option>
+        <option value="alta">Alta</option>
+        <option value="media">Média</option>
+        <option value="baixa">Baixa</option>
+      </select>
+      <select class="filter-select" id="filter-status">
+        <option value="">Todos os status</option>
+        <option value="desejo">Desejo</option>
+        <option value="comprado">Comprado</option>
+      </select>
+      <select class="filter-select" id="filter-sort">
+        <option value="date-desc">Mais recentes</option>
+        <option value="date-asc">Mais antigos</option>
+        <option value="price-asc">Menor preço</option>
+        <option value="price-desc">Maior preço</option>
+        <option value="title-asc">Título A–Z</option>
+      </select>
+    </div>
+
+    <div class="wishlist-grid" id="wishlist-grid"></div>
+
+    <div class="empty-state" id="empty-state" style="display:none">
+      <div class="empty-icon">♡</div>
+      <p class="empty-title">Sua wishlist está vazia</p>
+      <p class="empty-sub">Adicione livros que você deseja comprar ou ler em breve.</p>
+      <button class="btn-primary" onclick="document.getElementById('btn-add').click()">+ Adicionar Livro</button>
+    </div>
+  </main>
+
+  <!-- MODAL ADICIONAR/EDITAR -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">Adicionar à Wishlist</h2>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Título do Livro *</label>
+            <input type="text" class="form-input" id="f-title" placeholder="Ex: O Banquete" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Autor</label>
+            <input type="text" class="form-input" id="f-author" placeholder="Ex: Platão" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Categoria</label>
+            <input type="text" class="form-input" id="f-category" placeholder="Ex: Filosofia" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preço Estimado (R$)</label>
+            <input type="number" class="form-input" id="f-price" placeholder="0,00" min="0" step="0.01" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Loja / Fonte</label>
+            <input type="text" class="form-input" id="f-store" placeholder="Ex: Amazon, Estante Virtual…" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Prioridade</label>
+            <select class="form-input" id="f-priority">
+              <option value="alta">🔴 Alta</option>
+              <option value="media" selected>🟡 Média</option>
+              <option value="baixa">🟢 Baixa</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select class="form-input" id="f-status">
+              <option value="desejo" selected>♡ Desejo</option>
+              <option value="comprado">✓ Comprado</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Link de Compra</label>
+            <input type="url" class="form-input" id="f-link" placeholder="https://…" />
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Notas / Motivo para querer</label>
+            <textarea class="form-input form-textarea" id="f-notes" placeholder="Por que você quer este livro?"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="btn-cancel">Cancelar</button>
+        <button class="btn-primary" id="btn-save">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CONFIRMAR EXCLUSÃO -->
+  <div class="modal-overlay" id="confirm-overlay">
+    <div class="modal confirm-modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Remover da Wishlist</h2>
+        <button class="modal-close" id="confirm-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="confirm-text">Tem certeza que deseja remover <strong id="confirm-name"></strong> da sua wishlist?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="confirm-cancel">Cancelar</button>
+        <button class="btn-danger" id="confirm-delete">Remover</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="wishlist.js"></script>
+</body>
+</html>

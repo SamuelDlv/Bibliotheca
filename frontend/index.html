@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bibliotheca — Sistema de Leitura Filosófica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-glyph">ℬ</span>
+      <span class="logo-text">Bibliotheca</span>
+      <span class="logo-version">v7.0</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-section="dashboard"><span class="nav-icon">◈</span><span>Dashboard</span><span class="nav-badge" id="badge-reading">0</span></a>
+      <a href="#" class="nav-item" data-section="books"><span class="nav-icon">◉</span><span>Biblioteca</span><span class="nav-badge" id="badge-total">0</span></a>
+      <a href="#" class="nav-item" data-section="notes"><span class="nav-icon">◎</span><span>Anotações</span><span class="nav-badge" id="badge-notes">0</span></a>
+      <a href="#" class="nav-item" data-section="quotes"><span class="nav-icon">❝</span><span>Mural de Citações</span></a>
+      <a href="#" class="nav-item" data-section="diary"><span class="nav-icon">◷</span><span>Diário de Leitura</span></a>
+      <a href="#" class="nav-item" data-section="vocabulary"><span class="nav-icon">◬</span><span>Vocabulário</span></a>
+      <a href="#" class="nav-item" data-section="authors"><span class="nav-icon">◐</span><span>Autores</span></a>
+      <a href="#" class="nav-item" data-section="lists"><span class="nav-icon">◩</span><span>Listas Temáticas</span></a>
+      <a href="#" class="nav-item" data-section="connections"><span class="nav-icon">◌</span><span>Conexões</span></a>
+      <a href="#" class="nav-item" data-section="insights"><span class="nav-icon">◑</span><span>Insights</span></a>
+      <a href="#" class="nav-item" data-section="timeline"><span class="nav-icon">◇</span><span>Linha do Tempo</span></a>
+      <a href="#" class="nav-item" data-section="tags"><span class="nav-icon">✦</span><span>Conceitos</span></a>
+      <a href="#" class="nav-item" data-section="focus"><span class="nav-icon">⊙</span><span>Modo Foco</span></a>
+      <a href="#" class="nav-item" data-section="questions"><span class="nav-icon">?</span><span>Perguntas Abertas</span></a>
+      <a href="#" class="nav-item" data-section="settings"><span class="nav-icon">◦</span><span>Configurações</span></a>
+      <a href="../wishlist/index.html" class="nav-item" data-section="wishlist"><span class="nav-icon">♡</span><span>Wishlist</span></a>
+    </nav>
+    <div class="sidebar-status">
+      <div class="status-row"><span class="status-label">Coleção</span><div class="status-bar-track"><div class="status-bar-fill" id="sidebar-col-bar" style="width:0%"></div></div><span class="status-val" id="sidebar-col-pct">0%</span></div>
+      <div class="status-row"><span class="status-label">Meta</span><div class="status-bar-track"><div class="status-bar-fill" id="sidebar-goal-bar" style="width:0%"></div></div><span class="status-val" id="sidebar-goal-pct">0%</span></div>
+    </div>
+    <div class="sidebar-quote"><p id="daily-quote">"Conhece-te a ti mesmo."</p><span id="quote-author">— Sócrates</span></div>
+  </div>
+
+  <header class="mobile-header">
+    <button class="burger" id="burger-btn"><span></span><span></span><span></span></button>
+    <span class="mobile-logo">ℬ Bibliotheca</span>
+    <button class="btn-primary btn-sm" id="add-book-btn-mobile">+ Livro</button>
+  </header>
+
+  <main class="main-content">
+    <div class="topbar">
+      <div class="topbar-search"><span class="search-icon">⌕</span><input type="text" id="global-search" placeholder="buscar livros, autores, conceitos, citações…" /></div>
+      <div class="topbar-sysinfo">
+        <div class="sysinfo-item"><span class="sysinfo-dot"></span><span id="sysinfo-status">SISTEMA ATIVO</span></div>
+        <div class="sysinfo-item"><span id="sysinfo-time">--:--:--</span></div>
+        <div class="sysinfo-item"><span id="sysinfo-pages">0 PÁG</span></div>
+      </div>
+      <div class="topbar-actions desktop-only">
+        <div class="notif-wrapper" id="notif-wrapper">
+          <button class="notif-bell" id="notif-bell" onclick="toggleNotifPanel()" title="Notificações">
+            <span class="notif-bell-icon">🔔</span>
+            <span class="notif-badge hidden" id="notif-badge">0</span>
+          </button>
+          <div class="notif-panel hidden" id="notif-panel">
+            <div class="notif-panel-header">
+              <span>Notificações</span>
+              <button class="notif-clear" onclick="clearNotifications()">Limpar tudo</button>
+            </div>
+            <div id="notif-list" class="notif-list"></div>
+          </div>
+        </div>
+        <button class="btn-ghost btn-sm" onclick="openExportModal()">↓ Exportar</button>
+        <button class="btn-primary" id="add-book-btn">+ Novo Livro</button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <section class="section" id="section-dashboard">
+      <div class="section-header"><h1>Dashboard</h1><p class="section-subtitle" id="dashboard-date"></p></div>
+      <div class="stats-row">
+        <div class="stat-card"><span class="stat-value" id="stat-total">0</span><span class="stat-label">Livros</span></div>
+        <div class="stat-card"><span class="stat-value" id="stat-reading">0</span><span class="stat-label">Em Leitura</span></div>
+        <div class="stat-card"><span class="stat-value" id="stat-done">0</span><span class="stat-label">Concluídos</span></div>
+        <div class="stat-card"><span class="stat-value" id="stat-notes">0</span><span class="stat-label">Anotações</span></div>
+        <div class="stat-card"><span class="stat-value" id="stat-quotes-count">0</span><span class="stat-label">Citações</span></div>
+        <div class="stat-card"><span class="stat-value" id="stat-vocab">0</span><span class="stat-label">Vocab.</span></div>
+      </div>
+      <div class="dashboard-grid">
+        <div class="card col-2"><h3 class="card-title">Leituras em Andamento</h3><div id="current-reads-list" class="current-reads-list"><p class="empty-state">Nenhuma leitura ativa.</p></div></div>
+        <div class="card"><h3 class="card-title">Meta Anual</h3>
+          <div class="goal-container">
+            <div class="goal-circle"><canvas id="goal-canvas" width="140" height="140"></canvas><div class="goal-center"><span id="goal-books-done">0</span><span class="goal-separator">/</span><span id="goal-target">12</span></div></div>
+            <p class="goal-label">livros este ano</p>
+            <div class="goal-edit"><label>META:</label><input type="number" id="goal-input" min="1" max="100" value="12" /></div>
+          </div>
+        </div>
+      </div>
+      <div class="dashboard-grid mt-md">
+        <div class="card"><h3 class="card-title">Progresso por Categoria</h3><div id="category-chart" class="category-chart"></div></div>
+        <div class="card"><h3 class="card-title">Atividade Recente</h3><div id="activity-feed" class="activity-feed"><p class="empty-state">Nenhuma atividade ainda.</p></div></div>
+        <div class="card"><h3 class="card-title">Velocidade de Leitura</h3>
+          <div class="speed-widget">
+            <div class="speed-input-row"><label>Pág/hora:</label><input type="number" id="speed-input" min="1" max="500" value="30" /></div>
+            <div class="speed-results" id="speed-results"><p class="empty-state">Adicione livros em leitura.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="card mt-md"><h3 class="card-title">Progresso Atual de Leitura</h3><div id="progress-bars" class="progress-bars-container"><p class="empty-state">Nenhum livro em leitura.</p></div></div>
+      <div class="card mt-md"><h3 class="card-title">Revisões Pendentes</h3><div id="pending-reviews" class="pending-reviews"><p class="empty-state">Nenhuma revisão pendente. Configure intervalos nos livros.</p></div></div>
+      <div class="card mt-md"><h3 class="card-title">Mapa de Leituras Anuais</h3><div class="heatmap-wrapper"><div id="heatmap-grid" class="heatmap-grid"></div></div></div>
+    </section>
+
+    <!-- BOOKS -->
+    <section class="section hidden" id="section-books">
+      <div class="section-header"><h1>Biblioteca</h1><p class="section-subtitle">Sua coleção filosófica e histórica</p></div>
+      <div class="filters-bar">
+        <button class="filter-btn active" data-filter="all">Todos</button>
+        <button class="filter-btn" data-filter="lendo">Lendo</button>
+        <button class="filter-btn" data-filter="concluido">Concluídos</button>
+        <button class="filter-btn" data-filter="futuro">Lista de Espera</button>
+        <div class="filter-sep"></div>
+        <select id="category-filter" class="filter-select"><option value="all">Todas Categorias</option></select>
+        <div class="filter-sep"></div>
+        <select id="sort-filter" class="filter-select"><option value="recent">Mais Recentes</option><option value="title">Por Título</option><option value="author">Por Autor</option><option value="progress">Por Progresso</option></select>
+      </div>
+      <div id="books-grid" class="books-grid"><div class="empty-library"><span class="empty-icon">📚</span><p>Sua biblioteca está vazia.</p><button class="btn-primary" id="add-book-empty">Adicionar Primeiro Livro</button></div></div>
+    </section>
+
+    <!-- NOTES -->
+    <section class="section hidden" id="section-notes">
+      <div class="section-header"><h1>Anotações</h1><p class="section-subtitle">Sínteses, citações e reflexões por livro</p></div>
+      <div class="filters-bar"><select id="notes-book-filter" class="filter-select wide"><option value="all">Todos os livros</option></select></div>
+      <div id="notes-grid" class="notes-grid"><p class="empty-state">Nenhuma anotação. Clique em "✎ Notas" em um livro para adicionar.</p></div>
+    </section>
+
+    <!-- MURAL DE CITAÇÕES -->
+    <section class="section hidden" id="section-quotes">
+      <div class="section-header"><h1>Mural de Citações</h1><p class="section-subtitle">As frases que moldaram sua visão de mundo</p></div>
+      <div class="quotes-toolbar">
+        <select id="quotes-book-filter" class="filter-select"><option value="all">Todas as obras</option></select>
+        <select id="quotes-tag-filter" class="filter-select"><option value="all">Todos os conceitos</option></select>
+        <button class="btn-primary btn-sm" onclick="openQuoteModal()">+ Nova Citação</button>
+      </div>
+      <div id="quotes-mural" class="quotes-mural"></div>
+    </section>
+
+    <!-- DIÁRIO DE LEITURA -->
+    <section class="section hidden" id="section-diary">
+      <div class="section-header"><h1>Diário de Leitura</h1><p class="section-subtitle">Registro de cada sessão — quando, quanto e como você leu</p></div>
+      <div class="diary-top">
+        <button class="btn-primary" onclick="openDiaryModal()">+ Registrar Sessão</button>
+        <div class="diary-stats" id="diary-stats"></div>
+      </div>
+      <div id="diary-entries" class="diary-entries"><p class="empty-state">Nenhuma sessão registrada ainda.</p></div>
+    </section>
+
+    <!-- VOCABULÁRIO -->
+    <section class="section hidden" id="section-vocabulary">
+      <div class="section-header"><h1>Vocabulário Filosófico</h1><p class="section-subtitle">Conceitos definidos com suas próprias palavras</p></div>
+      <div class="vocab-toolbar">
+        <input type="text" id="vocab-search" class="vocab-search-input" placeholder="buscar conceito…" oninput="renderVocabulary()" />
+        <button class="btn-primary" onclick="openVocabModal()">+ Novo Conceito</button>
+      </div>
+      <div id="vocab-grid" class="vocab-grid"><p class="empty-state">Nenhum conceito definido ainda.</p></div>
+    </section>
+
+    <!-- AUTORES -->
+    <section class="section hidden" id="section-authors">
+      <div class="section-header"><h1>Autores</h1><p class="section-subtitle">Fichas dos pensadores da sua biblioteca</p></div>
+      <div class="authors-toolbar"><button class="btn-primary" onclick="openAuthorModal()">+ Novo Autor</button></div>
+      <div id="authors-grid" class="authors-grid"><p class="empty-state">Nenhum autor cadastrado.</p></div>
+    </section>
+
+    <!-- LISTAS TEMÁTICAS -->
+    <section class="section hidden" id="section-lists">
+      <div class="section-header"><h1>Listas Temáticas</h1><p class="section-subtitle">Trilhas de leitura curadas por você</p></div>
+      <div class="lists-toolbar"><button class="btn-primary" onclick="openListModal()">+ Nova Lista</button></div>
+      <div id="lists-container" class="lists-container"><p class="empty-state">Nenhuma lista criada ainda.</p></div>
+    </section>
+
+    <!-- CONEXÕES -->
+    <section class="section hidden" id="section-connections">
+      <div class="section-header"><h1>Conexões</h1><p class="section-subtitle">Mapa de relações entre livros, autores e conceitos</p></div>
+      <div class="connections-toolbar">
+        <button class="filter-btn active" data-conn="concepts" onclick="switchConnView('concepts',this)">Por Conceito</button>
+        <button class="filter-btn" data-conn="authors" onclick="switchConnView('authors',this)">Por Autor</button>
+        <button class="filter-btn" data-conn="era" onclick="switchConnView('era',this)">Por Época</button>
+      </div>
+      <div id="connections-view" class="connections-view"></div>
+    </section>
+
+    <!-- INSIGHTS -->
+    <section class="section hidden" id="section-insights">
+      <div class="section-header"><h1>Insights</h1><p class="section-subtitle">Análises e métricas da sua jornada intelectual</p></div>
+      <div class="insight-grid">
+        <div class="insight-card"><div class="insight-icon">📖</div><div class="insight-value" id="ins-avg-pages">—</div><div class="insight-label">Média de Páginas</div></div>
+
+        <div class="insight-card"><div class="insight-icon">🏆</div><div class="insight-value" id="ins-best-cat">—</div><div class="insight-label">Categoria Favorita</div></div>
+
+        <div class="insight-card"><div class="insight-icon">📅</div><div class="insight-value" id="ins-streak">—</div><div class="insight-label">Sessões Registradas</div></div>
+        <div class="insight-card"><div class="insight-icon">⏱</div><div class="insight-value" id="ins-total-hours">—</div><div class="insight-label">Horas de Leitura</div></div>
+      </div>
+      <div class="dashboard-grid mt-md">
+        <div class="card col-2"><h3 class="card-title">Top Livros Avaliados</h3><div id="top-books-list"></div></div>
+        <div class="card"><h3 class="card-title">Lista de Espera</h3><div id="queue-list"></div></div>
+      </div>
+      <div class="card mt-md"><h3 class="card-title">Distribuição por Categoria</h3><div id="ins-cat-breakdown"></div></div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="section hidden" id="section-timeline">
+      <div class="section-header"><h1>Linha do Tempo</h1><p class="section-subtitle">Sua evolução como leitor</p></div>
+      <div id="timeline-container" class="timeline-container"></div>
+    </section>
+
+    <!-- TAGS / CONCEITOS -->
+    <section class="section hidden" id="section-tags">
+      <div class="section-header"><h1>Conceitos &amp; Temas</h1><p class="section-subtitle">O universo de ideias que atravessa suas leituras</p></div>
+      <div class="tags-immersive-header">
+        <div class="tags-search-wrap"><span class="search-icon">⌕</span><input type="text" id="tags-search" placeholder="filtrar conceitos…" oninput="renderTagsCloud()" /></div>
+        <div class="tags-view-toggle">
+          <button class="filter-btn active" id="tags-view-cloud" onclick="setTagsView('cloud',this)">Nuvem</button>
+          <button class="filter-btn" id="tags-view-list" onclick="setTagsView('list',this)">Lista</button>
+        </div>
+      </div>
+      <div class="tags-cloud-wrapper"><div id="tags-cloud" class="tags-cloud"></div></div>
+      <div id="tag-books-result" class="tag-books-result mt-md"></div>
+    </section>
+
+    <!-- MODO FOCO -->
+    <section class="section hidden" id="section-focus">
+      <div class="focus-mode-wrapper" id="focus-mode-wrapper">
+        <div class="focus-intro" id="focus-intro">
+          <div class="focus-header-text"><span class="focus-glyph">◉</span><h2>Modo Foco</h2><p>Escolha uma obra para contemplar em silêncio</p></div>
+          <div id="focus-book-picker" class="focus-book-picker"></div>
+        </div>
+        <div class="focus-content hidden" id="focus-content"></div>
+      </div>
+    </section>
+
+    <!-- PERGUNTAS ABERTAS -->
+    <section class="section hidden" id="section-questions">
+      <div class="section-header"><h1>Perguntas Abertas</h1><p class="section-subtitle">Dúvidas que os livros levantaram — e onde você encontrou respostas</p></div>
+      <div class="questions-toolbar">
+        <button class="btn-primary" onclick="openQuestionModal()">+ Nova Pergunta</button>
+      </div>
+      <div id="questions-list" class="questions-list"><p class="empty-state">Nenhuma pergunta registrada ainda.</p></div>
+    </section>
+
+    <!-- CONFIGURAÇÕES -->
+    <section class="section hidden" id="section-settings">
+      <div class="section-header"><h1>Configurações</h1><p class="section-subtitle">Personalize categorias e conceitos da sua biblioteca</p></div>
+      <div class="settings-grid">
+
+        <div class="settings-card">
+          <h3 class="card-title">Categorias</h3>
+          <p class="settings-desc">Crie categorias personalizadas para organizar sua biblioteca.</p>
+          <div class="settings-add-row">
+            <input type="text" id="new-category-input" placeholder="Nova categoria…" class="settings-input" />
+            <input type="color" id="new-category-color" value="#5a7ab8" title="Cor da categoria" class="settings-color-picker" />
+            <button class="btn-primary btn-sm" onclick="addCategory()">Adicionar</button>
+          </div>
+          <div id="categories-list" class="settings-list"></div>
+        </div>
+
+        <div class="settings-card">
+          <h3 class="card-title">Tags / Conceitos</h3>
+          <p class="settings-desc">Gerencie seu vocabulário de conceitos. Tags usadas em livros não podem ser excluídas enquanto estiverem em uso.</p>
+          <div class="settings-add-row">
+            <input type="text" id="new-tag-input" placeholder="Novo conceito…" class="settings-input" />
+            <input type="color" id="new-tag-color" value="#7a8090" title="Cor do conceito" class="settings-color-picker" />
+            <button class="btn-primary btn-sm" onclick="addTag()">Adicionar</button>
+          </div>
+          <div id="tags-list" class="settings-list"></div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: VISUALIZAR LIVRO -->
+  <div class="modal-overlay" id="book-view-overlay" onclick="if(event.target===this)closeBookView()"></div>
+
+  <!-- MODAL: ADD/EDIT BOOK -->
+  <div class="modal-overlay" id="book-modal-overlay">
+    <div class="modal modal-wide" id="book-modal">
+      <div class="modal-header"><h2 id="modal-title">Novo Livro</h2><button class="modal-close" id="modal-close">✕</button></div>
+      <form id="book-form" class="modal-form">
+        <input type="hidden" id="book-id" />
+        <div class="form-row">
+          <div class="form-group"><label>Título *</label><input type="text" id="book-title" placeholder="Ex: Meditações" required /></div>
+          <div class="form-group"><label>Autor *</label><input type="text" id="book-author" placeholder="Ex: Marco Aurélio" required /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Categoria</label><select id="book-category"></select></div>
+          <div class="form-group"><label>Status</label><select id="book-status"><option value="lendo">Lendo</option><option value="concluido">Concluído</option><option value="futuro">Lista de Espera</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Total de Páginas</label><input type="number" id="book-total-pages" placeholder="300" min="1" /></div>
+          <div class="form-group"><label>Páginas Lidas</label><input type="number" id="book-pages-read" placeholder="0" min="0" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Ano de Leitura</label><input type="number" id="book-year" placeholder="2024" min="1900" max="2100" /></div>
+        </div>
+        <div class="form-group"><label>Tags / Conceitos (separados por vírgula)</label><input type="text" id="book-tags" placeholder="virtude, poder, tempo, ética…" autocomplete="off" /><div class="tags-suggestion-row" id="tags-suggestion-row"></div></div>
+        <div class="form-row">
+          <div class="form-group"><label>Época / Período Histórico</label><input type="text" id="book-era" placeholder="Ex: Séc. II d.C., Antiguidade…" /></div>
+          <div class="form-group"><label>Revisão em (dias) <span class="label-optional">opcional</span></label><input type="number" id="book-review-days" placeholder="ex: 90 dias" min="1" /></div>
+        </div>
+        <div class="form-group"><label>Notas Rápidas</label><textarea id="book-quick-notes" rows="2" placeholder="Impressões iniciais…"></textarea></div>
+        <div class="form-group"><label>Antes de ler — o que pensava sobre o tema?</label><textarea id="book-before" rows="2" placeholder="Minha visão prévia sobre este assunto era…"></textarea></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" id="modal-cancel">Cancelar</button>
+          <button type="submit" class="btn-primary">Salvar Livro</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: NOTES -->
+  <div class="modal-overlay" id="notes-modal-overlay">
+    <div class="modal modal-wide" id="notes-modal">
+      <div class="modal-header"><h2 id="notes-modal-title">Anotações</h2><button class="modal-close" id="notes-modal-close">✕</button></div>
+      <form id="notes-form" class="modal-form">
+        <input type="hidden" id="note-book-id" /><input type="hidden" id="note-id" />
+        <div class="form-group"><label>Citação Marcante</label><textarea id="note-quote" rows="3" placeholder='"A felicidade é a recompensa de uma vida virtuosa."'></textarea></div>
+        <div class="form-group"><label>Síntese em Um Parágrafo</label><textarea id="note-synthesis" rows="4" placeholder="O principal argumento do autor é…"></textarea></div>
+        <div class="form-group"><label>Impacto Pessoal</label><textarea id="note-impact" rows="3" placeholder="Esta leitura me fez perceber que…"></textarea></div>
+        <div class="form-group"><label>Perguntas Existenciais Geradas</label><textarea id="note-questions" rows="3" placeholder="O que é realmente a liberdade? Por que…"></textarea></div>
+        <div class="form-group"><label>Aplicação Prática</label><textarea id="note-practice" rows="3" placeholder="Vou aplicar isso ao…"></textarea></div>
+        <div class="form-group"><label>Depois de ler — como meu pensamento mudou?</label><textarea id="note-after" rows="3" placeholder="Antes eu pensava… agora percebo que…"></textarea></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" id="notes-modal-cancel">Cancelar</button>
+          <button type="submit" class="btn-primary">Salvar Anotação</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CITAÇÃO -->
+  <div class="modal-overlay" id="quote-modal-overlay">
+    <div class="modal" id="quote-modal">
+      <div class="modal-header"><h2 id="quote-modal-title">Nova Citação</h2><button class="modal-close" onclick="closeQuoteModal()">✕</button></div>
+      <form id="quote-form" class="modal-form">
+        <input type="hidden" id="quote-id" />
+        <div class="form-group"><label>Citação *</label><textarea id="q-text" rows="4" placeholder="Texto da citação…" required></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>Livro</label><select id="q-book"><option value="">— avulsa —</option></select></div>
+          <div class="form-group"><label>Conceitos (vírgula)</label><input type="text" id="q-tags" placeholder="virtude, tempo…" /></div>
+        </div>
+        <div class="form-group"><label>Reflexão pessoal</label><textarea id="q-reflection" rows="2" placeholder="Esta citação me lembra que…"></textarea></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" onclick="closeQuoteModal()">Cancelar</button>
+          <button type="submit" class="btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DIÁRIO -->
+  <div class="modal-overlay" id="diary-modal-overlay">
+    <div class="modal" id="diary-modal">
+      <div class="modal-header"><h2>Registrar Sessão de Leitura</h2><button class="modal-close" onclick="closeDiaryModal()">✕</button></div>
+      <form id="diary-form" class="modal-form">
+        <input type="hidden" id="diary-id" />
+        <div class="form-row">
+          <div class="form-group"><label>Livro *</label><select id="diary-book" required><option value="">Selecionar…</option></select></div>
+          <div class="form-group"><label>Data</label><input type="date" id="diary-date" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Páginas nessa sessão</label><input type="number" id="diary-pages" min="1" placeholder="30" /></div>
+          <div class="form-group"><label>Duração (minutos)</label><input type="number" id="diary-duration" min="1" placeholder="60" /></div>
+        </div>
+        <div class="form-group"><label>Humor / Estado Mental</label>
+          <select id="diary-mood"><option value="focado">🧠 Focado</option><option value="contemplativo">🌙 Contemplativo</option><option value="inquieto">⚡ Inquieto</option><option value="cansado">😴 Cansado</option><option value="inspirado">✨ Inspirado</option><option value="confuso">🌀 Confuso</option></select>
+        </div>
+        <div class="form-group"><label>Observação da Sessão</label><textarea id="diary-note" rows="3" placeholder="O que você percebeu, sentiu ou questionou nessa sessão?"></textarea></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" onclick="closeDiaryModal()">Cancelar</button>
+          <button type="submit" class="btn-primary">Registrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: VOCABULÁRIO -->
+  <div class="modal-overlay" id="vocab-modal-overlay">
+    <div class="modal" id="vocab-modal">
+      <div class="modal-header"><h2 id="vocab-modal-title">Novo Conceito</h2><button class="modal-close" onclick="closeVocabModal()">✕</button></div>
+      <form id="vocab-form" class="modal-form">
+        <input type="hidden" id="vocab-id" />
+        <div class="form-row">
+          <div class="form-group"><label>Termo *</label><input type="text" id="vocab-term" placeholder="Ex: Eudaimonia" required /></div>
+          <div class="form-group"><label>Origem</label><input type="text" id="vocab-origin" placeholder="Ex: grego εὐδαιμονία" /></div>
+        </div>
+        <div class="form-group"><label>Definição com suas palavras *</label><textarea id="vocab-def" rows="4" placeholder="Para mim, eudaimonia significa…" required></textarea></div>
+        <div class="form-group"><label>Encontrado em</label><input type="text" id="vocab-source" placeholder="Ex: Aristóteles, Ética a Nicômaco" /></div>
+        <div class="form-group"><label>Termos relacionados (vírgula)</label><input type="text" id="vocab-related" placeholder="felicidade, virtude, florescimento…" /></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" onclick="closeVocabModal()">Cancelar</button>
+          <button type="submit" class="btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: AUTOR -->
+  <div class="modal-overlay" id="author-modal-overlay">
+    <div class="modal modal-wide" id="author-modal">
+      <div class="modal-header"><h2 id="author-modal-title">Novo Autor</h2><button class="modal-close" onclick="closeAuthorModal()">✕</button></div>
+      <form id="author-form" class="modal-form">
+        <input type="hidden" id="author-id" />
+        <div class="form-row">
+          <div class="form-group"><label>Nome *</label><input type="text" id="author-name" placeholder="Ex: Marco Aurélio" required /></div>
+          <div class="form-group"><label>Período de Vida</label><input type="text" id="author-life" placeholder="Ex: 121–180 d.C." /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Corrente / Escola</label><input type="text" id="author-school" placeholder="Ex: Estoicismo" /></div>
+          <div class="form-group"><label>Origem</label><input type="text" id="author-origin" placeholder="Ex: Romano, Ateniense…" /></div>
+        </div>
+        <div class="form-group"><label>Mini-biografia</label><textarea id="author-bio" rows="4" placeholder="O que você sabe sobre este pensador…"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>Influenciado por (vírgula)</label><input type="text" id="author-influenced-by" placeholder="Ex: Epicteto, Platão…" /></div>
+          <div class="form-group"><label>Influenciou (vírgula)</label><input type="text" id="author-influenced" placeholder="Ex: Nietzsche, Kant…" /></div>
+        </div>
+        <div class="form-group"><label>Conceitos-chave (vírgula)</label><input type="text" id="author-concepts" placeholder="Ex: virtude, logos, hegemonikon…" /></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" onclick="closeAuthorModal()">Cancelar</button>
+          <button type="submit" class="btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: LISTA TEMÁTICA -->
+  <div class="modal-overlay" id="list-modal-overlay">
+    <div class="modal" id="list-modal">
+      <div class="modal-header"><h2 id="list-modal-title">Nova Lista</h2><button class="modal-close" onclick="closeListModal()">✕</button></div>
+      <form id="list-form" class="modal-form">
+        <input type="hidden" id="list-id" />
+        <div class="form-group"><label>Nome da Lista *</label><input type="text" id="list-name" placeholder="Ex: Para entender o Estoicismo" required /></div>
+        <div class="form-group"><label>Descrição</label><textarea id="list-desc" rows="2" placeholder="O objetivo desta trilha é…"></textarea></div>
+        <div class="form-group"><label>Livros da lista</label><div id="list-books-picker" class="list-books-picker"></div></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" onclick="closeListModal()">Cancelar</button>
+          <button type="submit" class="btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: EXPORTAR -->
+  <div class="modal-overlay" id="export-modal-overlay">
+    <div class="modal" id="export-modal">
+      <div class="modal-header"><h2>Exportar Anotações</h2><button class="modal-close" onclick="closeExportModal()">✕</button></div>
+      <div class="modal-form">
+        <div class="form-group"><label>Selecionar Livro</label><select id="export-book-select"><option value="all">Todos os livros</option></select></div>
+        <div class="form-group"><label>Formato</label><select id="export-format"><option value="txt">Texto (.txt)</option><option value="md">Markdown (.md)</option></select></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" onclick="closeExportModal()">Cancelar</button>
+          <button class="btn-primary" onclick="doExport()">Exportar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL: PERGUNTA ABERTA -->
+  <div class="modal-overlay" id="question-modal-overlay">
+    <div class="modal" id="question-modal">
+      <div class="modal-header"><h2>Nova Pergunta</h2><button class="modal-close" onclick="closeQuestionModal()">✕</button></div>
+      <form id="question-form" class="modal-form">
+        <input type="hidden" id="question-id" />
+        <div class="form-group"><label>Pergunta *</label><textarea id="question-text" rows="4" placeholder="O que é a liberdade para os estoicos? Como distinguir destino de fatalismo?" required></textarea></div>
+        <div class="form-group"><label>Surgiu ao ler</label><select id="question-book"><option value="">— sem livro específico —</option></select></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" onclick="closeQuestionModal()">Cancelar</button>
+          <button type="submit" class="btn-primary">Registrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CONFIRM -->
+  <div class="modal-overlay" id="confirm-modal-overlay">
+    <div class="modal confirm-modal" id="confirm-modal">
+      <div class="confirm-icon" id="confirm-icon">⚠</div>
+      <h3 class="confirm-title" id="confirm-title">Confirmar</h3>
+      <p class="confirm-message" id="confirm-message"></p>
+      <div class="confirm-actions">
+        <button class="btn-ghost" id="confirm-cancel-btn">Cancelar</button>
+        <button class="btn-danger" id="confirm-ok-btn">Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVO CONCEITO (tag desconhecida) -->
+  <div class="modal-overlay" id="new-tag-dialog-overlay">
+    <div class="modal confirm-modal" id="new-tag-dialog">
+      <div class="confirm-icon">🏷️</div>
+      <h3 class="confirm-title">Conceito não encontrado</h3>
+      <p class="confirm-message">O conceito <strong id="new-tag-dialog-name"></strong> não está cadastrado.<br>Deseja adicioná-lo à biblioteca?</p>
+      <div class="confirm-actions">
+        <button class="btn-ghost" id="new-tag-dialog-no">Não adicionar</button>
+        <button class="btn-primary" id="new-tag-dialog-yes">Adicionar conceito</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <script src="app.js"></script>
+</body>
+</html>

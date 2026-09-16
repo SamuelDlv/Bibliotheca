@@ -8,7 +8,7 @@ O projeto é um **frontend estático** (HTML/CSS/JS puro, sem build step) que co
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 - **Dashboard** — visão geral da coleção, progresso de leitura, heatmap de conclusões e revisões pendentes
 - **Biblioteca** — cadastro de livros com status (futuro / lendo / concluído), categorias e progresso de páginas
@@ -24,7 +24,7 @@ O projeto é um **frontend estático** (HTML/CSS/JS puro, sem build step) que co
 
 ---
 
-## 📁 Estrutura do projeto
+## Estrutura do projeto
 
 ```
 Bibliotheca/
@@ -51,7 +51,7 @@ Bibliotheca/
 
 ---
 
-## 🚀 Instalação e uso
+## Instalação e uso
 
 ### 1. Pré-requisitos
 - Python 3.10+
@@ -92,7 +92,7 @@ gunicorn -w 4 -b 0.0.0.0:5000 app:app
 
 ---
 
-## 🔌 Variáveis de ambiente (backend principal)
+## Variáveis de ambiente (backend principal)
 
 Copie `config/.env.example` para `backend/.env` e edite:
 
@@ -108,7 +108,7 @@ Copie `config/.env.example` para `backend/.env` e edite:
 
 ---
 
-## 📊 Modelo de dados (backend principal)
+## Modelo de dados (backend principal)
 
 ```
 categories ──────────────────────────────────────────────────
@@ -138,7 +138,7 @@ activity_feed   notifications   user_settings
 
 ---
 
-## 🔗 Endpoints da API principal
+## Endpoints da API principal
 
 | Área | Rotas |
 |---|---|
@@ -163,7 +163,7 @@ Todas as respostas seguem o formato `{ "ok": true/false, "data": ... }` (ou `"er
 
 ---
 
-## 🛠️ Integração frontend ↔ backend
+## Integração frontend ↔ backend
 
 O frontend fala com a API através de um objeto simples de fetch (`frontend/app.js`):
 
@@ -193,7 +193,7 @@ await API.post("/books", { title: "A República", author: "Platão", category: "
 
 ---
 
-## 🔒 Segurança
+## Segurança
 
 - Os arquivos `.env` **nunca** devem ser commitados — apenas os `.env.example` (sem senha) vão para o repositório. O `.gitignore` já cuida disso.
 - Antes de rodar o projeto pela primeira vez, copie os `.env.example` correspondentes e preencha com sua própria senha do MySQL (veja [Variáveis de ambiente](#-variáveis-de-ambiente-backend-principal) e o [README da wishlist](wishlist/README.md)).

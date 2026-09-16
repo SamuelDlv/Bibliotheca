@@ -23,7 +23,7 @@ wishlist/
 
 ---
 
-## Instalação
+## Instalação 
 
 ### 1. Pré-requisitos
 - Python 3.10+

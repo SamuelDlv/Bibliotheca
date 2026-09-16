@@ -70,7 +70,7 @@ A API sobe em `http://localhost:5001`. Depois é só abrir `wishlist/index.html`
 
 ---
 
-## 📊 Modelo de dados
+## Modelo de dados
 
 ```
 wl_categories ──┐

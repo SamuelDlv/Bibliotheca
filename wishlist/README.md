@@ -6,7 +6,7 @@ Roda como um frontend estático próprio (`index.html`) conectado a um backend F
 
 ---
 
-## 📁 Estrutura
+## Estrutura
 
 ```
 wishlist/
@@ -23,7 +23,7 @@ wishlist/
 
 ---
 
-## 🚀 Instalação
+## Instalação
 
 ### 1. Pré-requisitos
 - Python 3.10+
@@ -55,7 +55,7 @@ A API sobe em `http://localhost:5001`. Depois é só abrir `wishlist/index.html`
 
 ---
 
-## 🔌 Variáveis de ambiente
+## Variáveis de ambiente
 
 | Variável          | Padrão                    | Descrição                     |
 |-------------------|----------------------------|---------------------------------|
@@ -87,7 +87,7 @@ O backend expõe views (`v_wl_items`, `v_wl_stats`, `v_wl_by_category`) que já 
 
 ---
 
-## 🔗 Endpoints da API
+## Endpoints da API
 
 | Área | Rotas |
 |---|---|
@@ -102,6 +102,6 @@ Todas as respostas seguem o formato `{ "ok": true/false, "data": ... }` (ou `"er
 
 ---
 
-## 🔒 Segurança
+## Segurança
 
 Assim como o backend principal, este módulo não tem autenticação e é pensado para `localhost`. Veja a seção [Segurança](../README.md#-segurança) do README principal antes de expor a API fora da sua máquina.

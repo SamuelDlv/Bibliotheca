@@ -1,8 +1,8 @@
 # ℬ Bibliotheca
 
-O **Bibliotheca** é um sistema pessoal que estou desenvolvendo para organizar minha leitura. A ideia é ter em um único lugar a biblioteca, anotações, citações, diário de leitura, vocabulário, autores, influências e listas temáticas.
+O **Bibliotheca** é um sistema pessoal que estou desenvolvendo para organizar minha leitura. A ideia é reunir em um só lugar a biblioteca, anotações, citações, diário de leitura, vocabulário, autores, influências e listas temáticas.
 
-O projeto roda localmente e foi feito pensando no meu próprio fluxo de leitura, então várias partes da interface e da estrutura refletem necessidades que fui encontrando enquanto usava o sistema.
+O projeto roda localmente e a estrutura foi sendo adaptada conforme fui encontrando necessidades no meu próprio fluxo de leitura.
 
 ## O que dá para fazer
 
@@ -60,15 +60,15 @@ O backend principal usa a porta `5000`.
 
 ### Wishlist
 
-A wishlist possui seu próprio backend. As instruções ficam em [`wishlist/README.md`](wishlist/README.md).
+A wishlist possui seu próprio backend. As instruções ficam em `wishlist/README.md`.
 
 Depois de iniciar os serviços, abra `frontend/index.html` no navegador.
 
-No Windows, o arquivo `Iniciar Bibliotheca.bat` automatiza a inicialização, desde que o ambiente já esteja configurado.
+No Windows, `Iniciar Bibliotheca.bat` automatiza a inicialização, desde que o ambiente já esteja configurado.
 
 ## Segurança
 
-O projeto foi pensado para uso local e não possui autenticação de usuários. Os arquivos `.env` não devem ser enviados ao GitHub; apenas os arquivos de exemplo com configurações seguras devem ser versionados.
+O projeto foi pensado para uso local e não possui autenticação de usuários. Os arquivos `.env` não devem ser enviados ao GitHub; apenas arquivos de exemplo com configurações seguras devem ser versionados.
 
 Também não recomendo expor as APIs diretamente na internet sem implementar autenticação e revisar CORS, sessões e demais controles de segurança.
 
